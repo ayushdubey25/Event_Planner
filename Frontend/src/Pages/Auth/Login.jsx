@@ -12,31 +12,22 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.role) {
-      return alert("Please select a role");
-    }
-    try {
-      const res = await axios.post("http://localhost:5800/api/auth/login", form); // POST includes role now
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.user.role);
+    if (!form.role) return alert("Please select a role");
 
-      // Redirect based on role
-      switch (res.data.user.role) {
-        case "organizer":
-          navigate("/organizer/dashboard");
-          break;
-        case "attendee":
-          navigate("/attendee/agenda");
-          break;
-        case "vendor":
-          navigate("/vendor/dashboard");
-          break;
-        case "sponsor":
-          navigate("/sponsor/insights");
-          break;
-        default:
-          navigate("/");
-      }
+    try {
+      const res = await axios.post("http://localhost:5800/api/auth/login", form);
+
+      // Save token + role
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.user.role.toLowerCase());
+
+      // Navigate based on role
+      const role = res.data.user.role.toLowerCase();
+      if (role === "organizer") navigate("/organizer/dashboard");
+      else if (role === "attendee") navigate("/attendee/agenda");
+      else if (role === "vendor") navigate("/vendor/dashboard");
+      else if (role === "sponsor") navigate("/sponsor/insights");
+      else navigate("/");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }

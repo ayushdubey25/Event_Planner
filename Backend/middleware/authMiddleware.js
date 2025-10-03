@@ -3,7 +3,10 @@ const jwt = require("jsonwebtoken");
 const protect = (roles = []) => {
   return (req, res, next) => {
     try {
-      const token = req.header("Authorization")?.replace("Bearer ", "");
+      const authHeader = req.header("Authorization");
+      if (!authHeader) return res.status(401).json({ msg: "No token, access denied" });
+
+      const token = authHeader.split(" ")[1]; // Bearer <token>
       if (!token) return res.status(401).json({ msg: "No token, access denied" });
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -15,6 +18,7 @@ const protect = (roles = []) => {
 
       next();
     } catch (err) {
+      console.error("Auth Middleware Error:", err);
       res.status(401).json({ msg: "Invalid token" });
     }
   };

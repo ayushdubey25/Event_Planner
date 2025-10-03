@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../../Styling/CreateEvent.css';
+import axios from 'axios';
 
 const CreateEvent = () => {
+  const navigate = useNavigate();
   const [eventData, setEventData] = useState({
     name: '',
     type: 'conference',
@@ -10,21 +12,57 @@ const CreateEvent = () => {
     time: '',
     venue: '',
     description: '',
-    capacity: 100
+    capacity: 100,
   });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEventData(prev => ({
+    setEventData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Event Data:', eventData);
-    // Handle form submission
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setMessage('❌ No token found. Please login.');
+        setLoading(false);
+        return;
+      }
+
+      const res = await axios.post(
+        'http://localhost:5800/api/event/create',
+        eventData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log('Saved Event:', res.data);
+      setMessage('✅ Event created successfully!');
+
+      // Redirect after 2 seconds
+      setTimeout(() => navigate('/organizer/dashboard'), 2000);
+    } catch (err) {
+      console.error('Error creating event:', err);
+      if (err.response) {
+        // Server responded with a status
+        setMessage(`❌ ${err.response.data.msg || 'Failed to create event'}`);
+      } else {
+        setMessage('❌ Failed to create event. Check backend server.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,7 +79,7 @@ const CreateEvent = () => {
           <form onSubmit={handleSubmit} className="event-form">
             <div className="form-section">
               <h2>Basic Information</h2>
-              
+
               <div className="form-group">
                 <label htmlFor="name">Event Name *</label>
                 <input
@@ -83,7 +121,6 @@ const CreateEvent = () => {
                     value={eventData.capacity}
                     onChange={handleInputChange}
                     min="1"
-                    placeholder="Maximum attendees"
                   />
                 </div>
               </div>
@@ -141,14 +178,16 @@ const CreateEvent = () => {
             </div>
 
             <div className="form-actions">
-              <button type="button" className="btn btn-secondary">
-                Save Draft
+              <button type="submit" className="btn btn-secondary" disabled={loading}>
+                {loading ? 'Saving...' : 'Save Event'}
               </button>
               <Link to="/organizer/ai-plan" className="btn btn-primary">
                 Continue with AI Planning →
               </Link>
             </div>
           </form>
+
+          {message && <div className={`popup ${message.includes('❌') ? 'error' : 'success'}`}>{message}</div>}
 
           <div className="form-preview">
             <h3>Event Preview</h3>
