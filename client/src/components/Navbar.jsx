@@ -31,7 +31,7 @@ const styles = {
         alignItems: 'center',
         padding: '0px 40px',
         marginBottom: '0.5cm',
-        background: 'linear-gradient(135deg, #f3f4f8cd, #9e98eeff)',
+        background: 'linear-gradient(135deg, #f3f4f8cd, #1E90FF)',
         color: '#f4f4f4',
         fontFamily: "'Poppins', sans-serif",
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
@@ -43,7 +43,7 @@ const styles = {
         transition: 'all 0.3s ease-in-out'
     },
  brand: {
-        color: '#4d20ca8e',
+        color: '#004687',
         fontWeight: '1200',
         fontSize: '26px',
         letterSpacing: '1px',

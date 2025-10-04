@@ -63,6 +63,7 @@ button:hover {
 }
 
 .card {
+    margin-top: 1cm;
     background: #fff;
     padding: 20px;
     border-radius: 8px;
