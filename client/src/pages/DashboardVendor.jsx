@@ -200,7 +200,7 @@ const DashboardVendor = () => {
     const fetchTasks = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:5000/api/tasks/vendor', {
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/api/tasks/vendor', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTasks(res.data);
@@ -219,7 +219,7 @@ const DashboardVendor = () => {
         formData.append('file', fileUpload[taskId]);
 
         try {
-            await axios.post(`http://localhost:5000/api/tasks/${taskId}/upload`, formData, {
+            await axios.post(`https://event-planner-nu0c.onrender.com/api/tasks/${taskId}/upload`, formData, {
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
             });
             alert('File uploaded successfully!');
