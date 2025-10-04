@@ -97,7 +97,7 @@ const DashboardAttendee = () => {
 
     const fetchEvents = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/events', { headers: { Authorization: `Bearer ${token}` } });
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/api/events', { headers: { Authorization: `Bearer ${token}` } });
             setEvents(res.data);
         } catch(err) { console.log(err); } 
         finally { setLoading(false); }
@@ -105,14 +105,14 @@ const DashboardAttendee = () => {
 
     const fetchMyEvents = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/events/my-booked', { headers: { Authorization: `Bearer ${token}` } });
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/api/events/my-booked', { headers: { Authorization: `Bearer ${token}` } });
             setMyEvents(res.data);
         } catch(err) { console.log(err); }
     };
 
     const bookEvent = async (eventId) => {
         try {
-            const res = await axios.post(`http://localhost:5000/api/events/${eventId}/book`, {}, { headers: { Authorization: `Bearer ${token}` } });
+            const res = await axios.post(`https://event-planner-nu0c.onrender.com/api/events/${eventId}/book`, {}, { headers: { Authorization: `Bearer ${token}` } });
             alert('Booked successfully!');
             fetchMyEvents();
             if(res.data.ticket){
