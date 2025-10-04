@@ -261,7 +261,7 @@ const DashboardOrganizer = () => {
     const fetchEvents = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:5000/api/events', {
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/api/events', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setEvents(res.data);
@@ -271,7 +271,7 @@ const DashboardOrganizer = () => {
 
     const fetchVendors = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/vendors', {
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/api/auth/vendors', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setVendors(res.data);
@@ -280,7 +280,7 @@ const DashboardOrganizer = () => {
 
     const fetchTasks = async (eventId) => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/tasks/${eventId}`, {
+            const res = await axios.get(`https://event-planner-nu0c.onrender.com/api/tasks/${eventId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setTasks(res.data);
@@ -289,7 +289,7 @@ const DashboardOrganizer = () => {
 
     const fetchSponsors = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/auth/sponsors', {
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/api/auth/sponsors', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSponsors(res.data);
@@ -298,7 +298,7 @@ const DashboardOrganizer = () => {
 
     const fetchSponsorRequests = async (eventId) => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/sponsorRequests/event/${eventId}`, {
+            const res = await axios.get(`https://event-planner-nu0c.onrender.com/api/sponsorRequests/event/${eventId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSponsorRequests(res.data);
@@ -323,7 +323,7 @@ const DashboardOrganizer = () => {
         if (!eventTitle) return;
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:5000/api/events/create', {
+            const res = await axios.post('https://event-planner-nu0c.onrender.com/api/events/create', {
                 title: eventTitle,
                 type: "general",
                 description: eventDesc,
@@ -362,7 +362,7 @@ const DashboardOrganizer = () => {
         if(!assignedVendor){
             try {
                 const suggested = await axios.get(
-                    `http://localhost:5000/api/tasks/suggest-vendor/${selectedEvent._id}`,
+                    `https://event-planner-nu0c.onrender.com/api/tasks/suggest-vendor/${selectedEvent._id}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 if(suggested.data) assignVendorId = suggested.data._id;
@@ -380,7 +380,7 @@ const DashboardOrganizer = () => {
                 status: 'todo'
             };
 
-            const res = await axios.post('http://localhost:5000/api/tasks/create', taskData, {
+            const res = await axios.post('https://event-planner-nu0c.onrender.com/api/tasks/create', taskData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -402,7 +402,7 @@ const DashboardOrganizer = () => {
             return alert('Select event, sponsor, and amount');
 
         try {
-            await axios.post('http://localhost:5000/api/sponsorRequests/request', {
+            await axios.post('https://event-planner-nu0c.onrender.com/api/sponsorRequests/request', {
                 eventId: selectedEvent._id,
                 sponsorId: selectedSponsor,
                 amount: parseInt(sponsorAmount)
@@ -424,7 +424,7 @@ const DashboardOrganizer = () => {
     const updateStatus = async (task) => {
         const nextStatus = task.status === 'todo' ? 'inprogress' : task.status === 'inprogress' ? 'done' : 'todo';
         try {
-            await axios.put(`http://localhost:5000/api/tasks/${task._id}`,
+            await axios.put(`https://event-planner-nu0c.onrender.com/api/tasks/${task._id}`,
                 { status: nextStatus },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -438,7 +438,7 @@ const DashboardOrganizer = () => {
         if(!amount || !selectedEvent) return;
         try {
             const updatedEvent = { ...selectedEvent, budget: selectedEvent.budget + amount };
-            await axios.put(`http://localhost:5000/api/events/${selectedEvent._id}`,
+            await axios.put(`https://event-planner-nu0c.onrender.com/api/events/${selectedEvent._id}`,
                 updatedEvent,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
