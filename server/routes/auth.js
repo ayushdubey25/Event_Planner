@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const authMiddleware = require('../middleware/authMiddleware');
+
 
 const JWT_SECRET = 'hackathonsecret';
 
@@ -29,6 +31,23 @@ router.post('/login', async (req,res)=>{
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ token, userId: user._id, role: user.role, name: user.name });
     } catch(err){ res.status(500).json({ message: err.message }); }
+});
+// Get all users with role vendor
+router.get('/vendors', authMiddleware, async (req, res) => {
+    try {
+        if (req.user.role !== 'organizer') return res.status(403).json({ message: 'Unauthorized' });
+        const vendors = await User.find({ role: 'vendor' });
+        res.json(vendors);
+    } catch(err){ console.log(err); res.status(500).json({ message: 'Server error' }); }
+});
+router.get('/sponsors', authMiddleware, async (req, res) => {
+  try {
+    const sponsors = await User.find({ role: 'sponsor' }).select('name email');
+    res.json(sponsors);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to fetch sponsors' });
+  }
 });
 
 module.exports = router;
