@@ -191,7 +191,7 @@ const DashboardSponsor = () => {
     const fetchRequests = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:5000/api/sponsorRequests/pending', {
+            const res = await axios.get('https://event-planner-nu0c.onrender.com/sponsorRequests/pending', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setRequests(res.data);
@@ -204,7 +204,7 @@ const DashboardSponsor = () => {
     // --- Respond to sponsor request ---
     const respondRequest = async (id, status) => {
         try {
-            await axios.put(`http://localhost:5000/api/sponsorRequests/${id}/respond`, 
+            await axios.put(`https://event-planner-nu0c.onrender.com/api/sponsorRequests/${id}/respond`, 
                 { status }, 
                 { headers: { Authorization: `Bearer ${token}` } }
             );
