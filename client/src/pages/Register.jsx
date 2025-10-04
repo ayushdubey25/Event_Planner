@@ -251,7 +251,7 @@ const Register = () => {
         setError('');
         
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role });
+            const res = await axios.post('https://event-planner-nu0c.onrender.com/api/auth/register', { name, email, password, role });
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('userId', res.data.userId);
             localStorage.setItem('role', res.data.role);
